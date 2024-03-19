@@ -1,0 +1,13 @@
+[Unit]
+Description=mle
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+ExecStart=mle -db /var/mle/mle.db -k passwd -tmp /var/mle/tmp
+Restart=always
+RestartSec=60s
+User=root
+
+[Install]
+WantedBy=default.target
