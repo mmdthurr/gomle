@@ -34,6 +34,7 @@ func ParseName(name string) FName {
 	}
 }
 func contains(s []string, e string) bool {
+	e = strings.ToLower(e)
 	for _, a := range s {
 		if a == e {
 			return true
