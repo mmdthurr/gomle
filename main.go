@@ -1,8 +1,10 @@
 package main
 
 import (
+	"bytes"
 	"crypto/sha256"
 	"encoding/hex"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"mmd/gomle/db"
@@ -46,6 +48,7 @@ func main() {
 	up_key := flag.String("k", "upload", "upload path key")
 	sqlitep := flag.String("db", "test.db", "sqlite database path ")
 	tmpp := flag.String("tmp", "tmp", "tmp path ")
+	tgToken := flag.String("tg", "123456", "telegram bot token")
 
 	flag.Parse()
 
@@ -136,6 +139,14 @@ func main() {
 		}
 		defer fm.Close()
 		fm.Write(buffer)
+
+		tg_json, _ := json.Marshal(map[string]string{
+			"chat_id":    "@naharlo",
+			"parse_mode": "HTML",
+			"text":       fmt.Sprintf(`<a href="http://ar3642.top/mle/post/%d">/mle/</a>`, newpost.ID),
+		})
+
+		http.Post(fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", *tgToken), "application/json", bytes.NewBuffer(tg_json))
 
 		w.Write([]byte("OK 200!"))
 
